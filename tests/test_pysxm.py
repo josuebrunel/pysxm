@@ -64,7 +64,7 @@ def test_empty_node():
     xml = whatever.xml
     assert xml.tag == 'whatever'
     assert len(xml.getchildren()) == 1
-    assert xml.user == 'token'
+    assert xml.user.text == 'token'
 
     whatever = Whatever('token', 'this is t0k3n')
     xml = whatever.xml
