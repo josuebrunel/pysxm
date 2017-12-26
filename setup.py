@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 __author__ = 'Josue Kouka'
 __email__ = 'josuebrunel@gmail.com'
-__version__ = '0.1'
+__version__ = '0.2'
 
 
 def read(fname):
@@ -27,8 +27,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: 3.5',
         'Development Status :: 5 - Production/Stable',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Environment :: Console',
