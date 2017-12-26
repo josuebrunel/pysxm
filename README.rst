@@ -1,6 +1,9 @@
 Simple XML Python Marsheller
 ============================
 
+.. image:: https://travis-ci.org/josuebrunel/pysxm.svg?branch=master
+    :target: https://travis-ci.org/josuebrunel/pysxm
+
 **pysxm** is a simple and extensible xml python marsheller.
 It comes with the following pre-defined types:
 
@@ -85,4 +88,6 @@ Example
         <profile>student</profile>
         <birthdate>2007-06-20</birthdate>
     </user>
+
+
 
