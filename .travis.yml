@@ -3,7 +3,7 @@ language: python
 python:
 - '2.7'
 install:
-- pip install tox coverage lxml python-dateutil
+- pip install tox coverage lxml python-dateutil coveralls
 script:
 - coverage run --source=pysxm -m pytest -vs tests/
 after_success:
