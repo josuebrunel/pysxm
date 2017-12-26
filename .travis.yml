@@ -4,7 +4,7 @@ python:
 - '2.7'
 - pypy
 install:
-- pip install tox coverage
+- pip install tox coverage lxml python-dateutil
 script:
 - coverage run --source=pysxm -m pytest -vs tests/
 after_success:
