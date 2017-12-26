@@ -70,7 +70,7 @@ def test_empty_node():
     xml = whatever.xml
     assert xml.tag == 'whatever'
     assert len(xml.getchildren()) == 2
-    assert xml.user == 'token'
+    assert xml.user.text == 'token'
     assert xml.description == 'this is t0k3n'
 
 

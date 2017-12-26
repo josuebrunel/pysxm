@@ -2,7 +2,6 @@ sudo: false
 language: python
 python:
 - '2.7'
-- pypy
 install:
 - pip install tox coverage lxml python-dateutil
 script:
