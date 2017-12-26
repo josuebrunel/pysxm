@@ -95,4 +95,10 @@ class TimeType(GenericDateTime):
 class ComplexType(BaseType):
     """Data binding class for ComplexType
     """
-    sequence = []
+    _sequence = None
+
+    @property
+    def sequence(self):
+        if self._sequence:
+            return self._sequence
+        return self.__dict__.keys()

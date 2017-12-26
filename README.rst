@@ -13,13 +13,29 @@ It comes with the following pre-defined types:
 - SimpleType
 - ComplexType
 
+
+Installation
+============
+
+.. code:: python
+
+    pip install pysxm
+
+
+Things to know
+==============
+
+For all types, the default **tagname** is the lowercased name of the class e.g for **class Color(SimpleType)**  we will have **<color>**.
+You can set the attribute **_tagame** to customize the xml elemnt *tagname*.
+For **ComplexType** you can decide of the *order* of attribute to serialize and which one should be serialized by setting the **_sequence** attribute.
+
 **pysxm** uses *lxml objectify* under the hood. To manipulate the **xml object** of your class:
 
 .. code:: python
 
     In [16]: class Person(ComplexType):
     ...:     _tagname = 'personne'
-    ...:     sequence = ('lname', 'fname')
+    ...:     _sequence = ('lname', 'fname')
     ...:     def __init__(self, fname, lname):
     ...:         self.fname = fname
     ...:         self.lname = lname
@@ -39,15 +55,6 @@ Note that the *tag name* is not the expected one, because of:
 
     _tagname = 'personne'
 
-For **ComplexType**, the *sequence* attribut is mandatory and defines the order of the children. If *sequence* is empty, no attributes will be processed.
-
-
-Installation
-============
-
-.. code:: python
-
-    pip install pysxm
 
 Example
 -------

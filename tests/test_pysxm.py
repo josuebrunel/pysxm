@@ -139,3 +139,17 @@ def test_complex_type():
     assert xml.identity.birthinfo.country.text == 'U.S'
     assert xml.identity.birthinfo.dateNaissance.text == '2007-06-20'
     assert xml.lastlogin.text == '2017-12-25T08:30:12'
+
+
+def test_complex_type_without_sequence():
+
+    class Person(ComplexType):
+
+        def __init__(self, fname, lname):
+            self.fname = fname
+            self.lname = lname
+
+    person = Person('token', 'black')
+    xml = person.xml
+    assert xml.fname == 'token'
+    assert xml.lname == 'black'
