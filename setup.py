@@ -13,14 +13,14 @@ def read(fname):
 requirements = read('requirements.txt').splitlines()
 
 setup(
-    name="pysxdb",
+    name="pysxm",
     version=__version__,
-    description="Simple Python XML Data Binding",
+    description="Simple and extensible xml python marsheller",
     long_description=read("README.rst"),
     author=__author__,
     author_email=__email__,
-    url="https://github.com/josuebrunel/pysxdb",
-    download_url="https://github.com/josuebrunel/pysxdb/archive/{0}.tar.gz".format(__version__),
+    url="https://github.com/josuebrunel/pysxm",
+    download_url="https://github.com/josuebrunel/pysxm/archive/{0}.tar.gz".format(__version__),
     keywords=['xml', 'data binding', 'data', 'binding'],
     packages=find_packages(),
     classifiers=[

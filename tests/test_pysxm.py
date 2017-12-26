@@ -1,7 +1,7 @@
 import pytest
 
-from pysxdb import (SimpleType, DateTimeType, DateType,
-                    TimeType, ComplexType)
+from pysxm import (SimpleType, DateTimeType, DateType,
+                   TimeType, ComplexType)
 
 
 class LightColor(SimpleType):
