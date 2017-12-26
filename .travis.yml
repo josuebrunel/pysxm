@@ -1,0 +1,12 @@
+sudo: false
+language: python
+python:
+- '2.7'
+- pypy
+install:
+- pip install tox coverage
+script:
+- coverage run --source=pysxm -m pytest -vs tests/
+after_success:
+- coverage report
+- coveralls
