@@ -54,7 +54,7 @@ Example
 
 .. code:: python
 
-    In [1]: from pysxdb import SimpleType, ComplexType, DateType
+    In [1]: from pysxm import SimpleType, ComplexType, DateType
     In [2]: class BirthDate(DateType):
     ...:     pass
     ...:
