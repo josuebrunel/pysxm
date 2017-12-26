@@ -1,10 +1,10 @@
-Python Simple XML Marsheller
+Simple XML Python Marsheller
 ============================
 
 **pysxm** is a simple and extensible xml python marsheller.
 It comes with the following pre-defined types:
 
-- DateTimeType 
+- DateTimeType
 - DateType
 - TimeType
 - SimpleType
@@ -20,7 +20,7 @@ It comes with the following pre-defined types:
     ...:     def __init__(self, fname, lname):
     ...:         self.fname = fname
     ...:         self.lname = lname
-    ...:         
+    ...:
     In [17]: token = Person('token', 'black')
     In [18]: token.xml
     Out[18]: <Element personne at 0x7f85c0df2e60>
@@ -35,10 +35,10 @@ Note that the *tag name* is not the expected one, because of:
 .. code:: python
 
     _tagname = 'personne'
-    
+
 For **ComplexType**, the *sequence* attribut is mandatory and defines the order of the children. If *sequence* is empty, no attributes will be processed.
-    
-    
+
+
 Installation
 ============
 
@@ -54,26 +54,26 @@ Example
     In [1]: from pysxdb import SimpleType, ComplexType, DateType
     In [2]: class BirthDate(DateType):
     ...:     pass
-    ...: 
+    ...:
     In [3]: class Profile(SimpleType):
     ...:     allowed_values = ('teacher', 'student')
-    ...:     
+    ...:
     In [4]: class User(ComplexType):
-    ...:     
+    ...:
     ...:     sequence = ('username', 'profile', 'birtdate')
-    ...:     
+    ...:
     In [5]: class User(ComplexType):
-    ...:     
+    ...:
     ...:     sequence = ('username', 'profile', 'birtdate')
-    ...:     
+    ...:
     In [6]: class User(ComplexType):
-    ...:     
+    ...:
     ...:     sequence = ('username', 'profile', 'birthdate')
     ...:     def __init__(self, data):
     ...:         self.username = data['username']
     ...:         self.profile = Profile(data['profile'])
     ...:         self.birthdate = BirthDate(data['birthdate'])
-    ...:         
+    ...:
     In [8]: data = {
     ...: 'username': 't0k3n',
     ...: 'profile': 'student',
