@@ -19,6 +19,8 @@
 # SOFTWARE.
 from __future__ import unicode_literals
 
+import sys
+
 from dateutil.parser import parse as dateutil_parse
 from lxml import etree, objectify as xobject
 
@@ -27,6 +29,14 @@ def is_clean(element):
     if not element.getchildren() and element.text is None:
         return False
     return all(is_clean(child) for child in element.iterchildren())
+
+
+def is_text_type(value):
+    if sys.version_info[0] == 3:
+        text_types = (bytes, str)
+    else:
+        text_types = (str, unicode)
+    return isinstance(value, text_types)
 
 
 class BaseType(object):
@@ -60,7 +70,7 @@ class BaseType(object):
             attr = getattr(self, subelt, None)
             if not attr:
                 continue
-            if isinstance(attr, (str, unicode)):
+            if is_text_type(attr):
                 tag.append(self.make_element(subelt, attr, namespace=self.namespace))
             else:
                 xml = attr.xml
