@@ -32,7 +32,7 @@ def is_clean(element):
 
 
 def is_text_type(value):
-    if sys.version_info[0] == 3:
+    if sys.version_info.major == 3:
         text_types = (bytes, str)
     else:
         text_types = (str, unicode)
