@@ -2,7 +2,7 @@ Simple XML Python Marsheller
 ============================
 
 .. image:: https://travis-ci.org/josuebrunel/pysxm.svg?branch=master
-    :target: https://travis-ci.org/josuebrunel/pysxm 
+    :target: https://travis-ci.org/josuebrunel/pysxm
 .. image:: https://coveralls.io/repos/github/josuebrunel/pysxm/badge.svg?branch=master
     :target: https://coveralls.io/github/josuebrunel/pysxm?branch=master
 
@@ -98,6 +98,17 @@ Example
         <profile>student</profile>
         <birthdate>2007-06-20</birthdate>
     </user>
+    # SAVING ELEMENT INTO FILE
+    In [1]: p = Person('token', 'black')
+
+    In [2]: p.save('person.xml')
+
+    In [3]: cat person.xml
+    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <lname>black</lname>
+      <fname>token</fname>
+    </person>
+    In [4]:
 
 
 

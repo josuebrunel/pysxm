@@ -19,6 +19,10 @@
 # SOFTWARE.
 from __future__ import unicode_literals
 
+import io
+import os
+from lxml import objectify
+
 import pytest
 
 from pysxm import (SimpleType, DateTimeType, DateType,
@@ -174,3 +178,22 @@ def test_complex_type_without_sequence():
     xml = person.xml
     assert xml.fname == 'token'
     assert xml.lname == 'black'
+
+
+def test_save_to_file(tmpdir):
+
+    class Person(ComplexType):
+
+        def __init__(self, fname, lname):
+            self.fname = fname
+            self.lname = lname
+
+    token = Person('token', 'black')
+    filename = os.path.join(tmpdir.strpath, 'person.xml')
+    assert os.path.isfile(filename) is False
+    token.save(filename)
+    assert os.path.isfile(filename) is True
+    content = io.open(filename, 'rb').read()
+    root = objectify.XML(content)
+    assert root.fname == 'token'
+    assert root.lname == 'black'

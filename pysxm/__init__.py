@@ -19,6 +19,7 @@
 # SOFTWARE.
 from __future__ import unicode_literals
 
+import io
 import sys
 
 from dateutil.parser import parse as dateutil_parse
@@ -82,6 +83,11 @@ class BaseType(object):
 
     def __str__(self):
         return etree.tostring(self.xml, pretty_print=True)
+
+    def save(self, filename):
+        with io.open(filename, 'wb') as fp:
+            content = etree.tostring(self.xml, pretty_print=True)
+            fp.write(content)
 
 
 class SimpleType(BaseType):
