@@ -18,21 +18,19 @@ It comes with the following pre-defined types:
 
 
 Installation
-============
+------------
 
 .. code:: python
 
     pip install pysxm
 
 
-Things to know
-==============
+Couple things to know
+---------------------
 
-For all types, the default **tagname** is the lowercased name of the class e.g for **class Color(SimpleType)**  we will have **<color>**.
-You can set the attribute **_tagame** to customize the xml elemnt *tagname*.
-For **ComplexType** you can decide of the *order* of attribute to serialize and which one should be serialized by setting the **_sequence** attribute.
-
-**pysxm** uses *lxml objectify* under the hood. To manipulate the **xml object** of your class:
+- For all types, the default **tagname** is the lowercased name of the class e.g for **class Color(SimpleType)**  we will have **<color>**. You can customize it by setting the attribute **_tagame** in your subclass.
+- For **ComplexType** you can decide of the **order**  and the **presence** of attributes to serialize by setting the **_sequence** attribute (tuple, list) in your subclass.
+- **pysxm** uses *lxml objectify* under the hood. To manipulate the **xml object** of your class:
 
 .. code:: python
 
@@ -59,8 +57,8 @@ Note that the *tag name* is not the expected one, because of:
     _tagname = 'personne'
 
 
-Example
--------
+Examples
+--------
 
 .. code:: python
 
@@ -71,17 +69,9 @@ Example
     In [3]: class Profile(SimpleType):
     ...:     allowed_values = ('teacher', 'student')
     ...:
-    In [4]: class User(ComplexType):
-    ...:
-    ...:     sequence = ('username', 'profile', 'birtdate')
-    ...:
-    In [5]: class User(ComplexType):
-    ...:
-    ...:     sequence = ('username', 'profile', 'birtdate')
-    ...:
     In [6]: class User(ComplexType):
     ...:
-    ...:     sequence = ('username', 'profile', 'birthdate')
+    ...:     _sequence = ('username', 'profile', 'birthdate')
     ...:     def __init__(self, data):
     ...:         self.username = data['username']
     ...:         self.profile = Profile(data['profile'])
@@ -109,6 +99,21 @@ Example
       <fname>token</fname>
     </person>
     In [4]:
+    # SETTINGS NAMESPACE
+    In [5]: class Person(ComplexType):
+    ...:     namespace = 'http://tempuri.org/XMLSchema.xsd'
+    ...:     nsmap = {'xs': 'http://tempuri.org/XMLSchema.xsd'}
+    ...:     def __init__(self, fname, lname):
+    ...:         self.fname = fname
+    ...:         self.lname = lname
+    ...:
+    In [6]: p = Person('token', 'black')
+    In [7]: print(p)
+    <xs:person xmlns:xs="http://tempuri.org/XMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <xs:lname>black</xs:lname>
+        <xs:fname>token</xs:fname>
+    </xs:person>
+    In [8]:
 
 
 
