@@ -25,7 +25,7 @@ from lxml import objectify
 
 import pytest
 
-from pysxm.pysxm import (SimpleType, DateTimeType, DateType,
+from pysxm import (SimpleType, DateTimeType, DateType,
                    TimeType, ComplexType)
 
 
