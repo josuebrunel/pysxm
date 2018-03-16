@@ -4,7 +4,7 @@ python:
 - '2.7'
 - '3.5'
 install:
-- pip install tox coverage lxml python-dateutil coveralls
+- pip install tox coverage lxml python-dateutil coveralls tox-travis
 script:
 - tox -r
 after_success:
