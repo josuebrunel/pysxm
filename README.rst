@@ -115,14 +115,17 @@ Examples
     </xs:person>
 
 
-Instead of defining useless class for **none complex type**, you can some descriptors
+Descriptors
+-----------
+
+Instead of defining useless class for **none complex type**, you can use some descriptors
 
 .. code:: python
 
     In [1]: from pysxm import ComplexType, XDateTimeType, XSimpleType, XDateType, XTimeType
     In [2]: class Player(ComplexType):
     ...:
-    ...:         platform = XSimpleType('platform', ['pc'])
+    ...:         platform = XSimpleType(['pc'], 'platform')
     ...:         lastlogin = XDateTimeType('lastlogin')
     ...:         birthdate = XDateType('birthdate')
     ...:         timeplayed = XTimeType('timeplayed')
