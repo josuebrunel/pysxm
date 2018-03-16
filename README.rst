@@ -99,7 +99,7 @@ Examples
       <fname>token</fname>
     </person>
     In [4]:
-    # SETTINGS NAMESPACE
+    # SETTING NAMESPACE
     In [5]: class Person(ComplexType):
     ...:     namespace = 'http://tempuri.org/XMLSchema.xsd'
     ...:     nsmap = {'xs': 'http://tempuri.org/XMLSchema.xsd'}
@@ -113,7 +113,41 @@ Examples
         <xs:lname>black</xs:lname>
         <xs:fname>token</xs:fname>
     </xs:person>
-    In [8]:
 
 
+Instead of defining useless class for **none complex type**, you can some descriptors
 
+.. code:: python
+
+    In [1]: from pysxm import ComplexType, XDateTimeType, XSimpleType, XDateType, XTimeType
+    In [2]: class Player(ComplexType):
+    ...:
+    ...:         platform = XSimpleType('platform', ['pc'])
+    ...:         lastlogin = XDateTimeType('lastlogin')
+    ...:         birthdate = XDateType('birthdate')
+    ...:         timeplayed = XTimeType('timeplayed')
+    ...:
+    ...:         def __init__(self, gamertag, platform, brithdate):
+    ...:             self.gamertag = gamertag
+    ...:             self.platform = platform
+    ...:             self.birthdate = brithdate
+    ...:
+    In [3]: player = Player('lokinghd', 'pc', '1990-10-10')
+    In [4]: print(player)
+    <player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <gamertag>lokinghd</gamertag>
+        <platform>pc</platform>
+        <birthdate>1990-10-10</birthdate>
+    </player>
+    In [5]: player.lastlogin = '2018-03-20T00:27'
+    In [6]: player.timeplayed = '04:42'
+    In [7]: print(player)
+    <player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <gamertag>lokinghd</gamertag>
+        <platform>pc</platform>
+        <timeplayed>04:42:00</timeplayed>
+        <lastlogin>2018-03-20T00:27:00</lastlogin>
+        <birthdate>1990-10-10</birthdate>
+    </player>
+
+Voila :wink:
