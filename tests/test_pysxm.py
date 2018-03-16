@@ -203,7 +203,7 @@ def test_descriptor_attribute():
 
     class Player(ComplexType):
 
-        platform = XSimpleType('platform', ['pc'])
+        platform = XSimpleType(['pc'], 'platform')
         lastlogin = XDateTimeType('lastlogin')
         birthdate = XDateType('birthdate')
         timeplayed = XTimeType('timeplayed')
@@ -226,3 +226,26 @@ def test_descriptor_attribute():
     assert xml.birthdate == '1990-10-10'
     assert xml.lastlogin == '2018-03-20T00:27:00'
     assert xml.timeplayed == '04:42:00'
+
+
+def test_xsimple_type_subclass():
+
+    class Platform(XSimpleType):
+        name = 'platform'
+
+    class XboxGamer(ComplexType):
+
+        platform = Platform(['xone', 'xbox360', 'xbox'])
+
+        def __init__(self, gamertag, platform):
+            self.gamertag = gamertag
+            self.platform = platform
+
+    with pytest.raises(ValueError) as exc:
+        XboxGamer('l33t', 'ps4')
+    assert exc.value.args[0] == "<xboxgamer> value (ps4) not in %s" % ['xone', 'xbox360', 'xbox']
+
+    xgamer = XboxGamer('l33t', 'xone')
+    xml = xgamer.xml
+    assert xml.gamertag == 'l33t'
+    assert xml.platform == 'xone'

@@ -145,9 +145,10 @@ class ComplexType(BaseType):
 
 class XSimpleType(object):
 
-    def __init__(self, name, allowed_values):
-        self.name = name
+    def __init__(self, allowed_values, name=None):
         self.allowed_values = allowed_values
+        if name:
+            self.name = name
 
     def __set__(self, instance, value):
         if instance is None:
