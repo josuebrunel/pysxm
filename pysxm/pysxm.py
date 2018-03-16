@@ -159,6 +159,8 @@ class XSimpleType(object):
         instance.__dict__[self.name] = value
 
     def __get__(self, instance, klass):
+        if instance is None:
+            return self
         return instance.__dict__[self.name]
 
 
