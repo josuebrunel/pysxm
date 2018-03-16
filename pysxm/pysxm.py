@@ -182,6 +182,8 @@ class XDateTimeType(object):
             instance.__dict__[self.name] = parsed_date.isoformat()
 
     def __get__(self, instance, klass):
+        if instance is None:
+            return self
         return instance.__dict__[self.name]
 
 
