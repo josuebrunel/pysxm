@@ -6,7 +6,7 @@ python:
 install:
 - pip install tox coverage lxml python-dateutil coveralls
 script:
-- python -m coverage run --source=pysxm -m pytest -vs tests/
+- tox -r
 after_success:
 - python -m coverage report
 - coveralls
