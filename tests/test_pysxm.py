@@ -25,8 +25,8 @@ from lxml import objectify
 
 import pytest
 
-from pysxm import (SimpleType, DateTimeType, DateType,
-                   TimeType, ComplexType)
+from pysxm import (SimpleType, DateTimeType, DateType, TimeType, ComplexType,
+                   XSimpleType, XDateTimeType, XDateType, XTimeType)
 
 
 class LightColor(SimpleType):
@@ -197,3 +197,32 @@ def test_save_to_file(tmpdir):
     root = objectify.XML(content)
     assert root.fname == 'token'
     assert root.lname == 'black'
+
+
+def test_descriptor_attribute():
+
+    class Player(ComplexType):
+
+        platform = XSimpleType('platform', ['pc'])
+        lastlogin = XDateTimeType('lastlogin')
+        birthdate = XDateType('birthdate')
+        timeplayed = XTimeType('timeplayed')
+
+        def __init__(self, gamertag, platform, brithdate):
+            self.gamertag = gamertag
+            self.platform = platform
+            self.birthdate = brithdate
+
+    with pytest.raises(ValueError) as exc:
+        Player('lokinghd', 'xone', '1990-10-10')
+    assert exc.value.args[0] == "<player> value (xone) not in %s" % ['pc']
+
+    josh = Player('lokinghd', 'pc', '1990-10-10')
+    josh.lastlogin = '2018-03-20T00:27'
+    josh.timeplayed = '04:42'
+    xml = josh.xml
+    assert xml.gamertag == 'lokinghd'
+    assert xml.platform == 'pc'
+    assert xml.birthdate == '1990-10-10'
+    assert xml.lastlogin == '2018-03-20T00:27:00'
+    assert xml.timeplayed == '04:42:00'

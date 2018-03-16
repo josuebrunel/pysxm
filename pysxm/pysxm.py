@@ -140,5 +140,57 @@ class ComplexType(BaseType):
             return self._sequence
         return self.__dict__.keys()
 
+# DESCRIPTORS
 
-__all__ = ["SimpleType", "DateTimeType", "DateType", "TimeType", "ComplexType"]
+
+class XSimpleType(object):
+
+    def __init__(self, name, allowed_values):
+        self.name = name
+        self.allowed_values = allowed_values
+
+    def __set__(self, instance, value):
+        if instance is None:
+            return self
+        if value not in self.allowed_values:
+            raise ValueError('<%s> value (%s) not in %s' % (
+                instance.tagname, value, self.allowed_values))
+        instance.__dict__[self.name] = value
+
+    def __get__(self, instance, klass):
+        return instance.__dict__[self.name]
+
+
+class XDateTimeType(object):
+
+    dtype = None
+
+    def __init__(self, name, value=None):
+        self.name = name
+        self.value = value
+
+    def __set__(self, instance, value):
+        if instance is None:
+            return self
+        parsed_date = dateutil_parse(value)
+        if self.dtype:
+            instance.__dict__[self.name] = getattr(parsed_date, self.dtype)().isoformat()
+        else:
+            instance.__dict__[self.name] = parsed_date.isoformat()
+
+    def __get__(self, instance, klass):
+        return instance.__dict__[self.name]
+
+
+class XDateType(XDateTimeType):
+
+    dtype = 'date'
+
+
+class XTimeType(XDateTimeType):
+
+    dtype = 'time'
+
+
+__all__ = ["SimpleType", "DateTimeType", "DateType", "TimeType", "ComplexType",
+           "XSimpleType", "XDateTimeType", "XDateType", "XTimeType"]
