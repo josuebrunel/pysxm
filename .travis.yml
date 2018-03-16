@@ -4,9 +4,9 @@ python:
 - '2.7'
 - '3.5'
 install:
-- pip install tox coverage lxml python-dateutil coveralls tox-travis
+- pip install tox coverage lxml python-dateutil coveralls
 script:
-- tox -r
+- python -m coverage run --source=pysxm -m pytest -vs tests/
 after_success:
 - python -m coverage report
 - coveralls
