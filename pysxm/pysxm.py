@@ -46,6 +46,7 @@ class BaseType(object):
     _tagname = None
     namespace = None
     nsmap = None
+    attrib = {}
 
     def __repr__(self):
         return '<%s>' % self.tagname
@@ -65,21 +66,25 @@ class BaseType(object):
     @property
     def xml(self):
         if not isinstance(self, (ComplexType,)):
-            return self.make_element(self.tagname, self.value, namespace=self.namespace)
-        tag = self.make_element(self.tagname, namespace=self.namespace, nsmap=self.nsmap)
-        for subelt in self.sequence:
-            attr = getattr(self, subelt, None)
-            if not attr:
-                continue
-            if is_text_type(attr):
-                tag.append(self.make_element(subelt, attr, namespace=self.namespace))
-            else:
-                xml = attr.xml
-                if not is_clean(xml):
+            element = self.make_element(self.tagname, self.value, namespace=self.namespace)
+        else:
+            element = self.make_element(self.tagname, namespace=self.namespace, nsmap=self.nsmap)
+            for subelt in self.sequence:
+                attr = getattr(self, subelt, None)
+                if not attr:
                     continue
-                tag.append(xml)
-        xobject.deannotate(tag, xsi_nil=True)
-        return tag
+                if is_text_type(attr):
+                    element.append(self.make_element(subelt, attr, namespace=self.namespace))
+                else:
+                    xml = attr.xml
+                    if not is_clean(xml):
+                        continue
+                    element.append(xml)
+        xobject.deannotate(element, xsi_nil=True)
+        # set element attributes
+        for key, value in self.attrib.items():
+            element.set(key, value)
+        return element
 
     def __str__(self):
         return etree.tostring(self.xml, pretty_print=True)

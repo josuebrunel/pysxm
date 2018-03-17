@@ -27,6 +27,7 @@ import pytest
 
 from pysxm import (SimpleType, DateTimeType, DateType, TimeType, ComplexType,
                    XSimpleType, XDateTimeType, XDateType, XTimeType)
+from pysxm.pysxm import BaseType
 
 
 class LightColor(SimpleType):
@@ -249,3 +250,19 @@ def test_xsimple_type_subclass():
     xml = xgamer.xml
     assert xml.gamertag == 'l33t'
     assert xml.platform == 'xone'
+
+
+def test_type_attribute():
+    class LimitedNoneNegativeValue(BaseType):
+        attrib = {'min_value': '0', 'max_value': '100'}
+        tagname = 'value'
+
+        def __init__(self, value):
+            if not (int(self.attrib['min_value']) <= value < int(self.attrib['max_value'])):
+                raise ValueError('Value not within range')
+            self.value = str(value)
+
+    someval = LimitedNoneNegativeValue(20)
+    assert someval.xml.text == '20'
+    assert someval.xml.attrib['min_value'] == '0'
+    assert someval.xml.attrib['max_value'] == '100'
