@@ -30,7 +30,25 @@ from pysxm import (SimpleType, DateTimeType, DateType, TimeType, ComplexType,
 from pysxm.pysxm import BaseType
 
 
-class LightColor(SimpleType):
+class ListSimpleType(SimpleType):
+
+    allowed_values = []
+
+    def check_restriction(self, value):
+        if value not in self.allowed_values:
+            raise ValueError('<%s> value (%s) not in %s' % (self.tagname, value,
+                                                            self.allowed_values))
+
+
+class ListXSimpleType(XSimpleType):
+
+    def check_restriction(self, instance, value):
+        if value not in self.restriction_values:
+            raise ValueError('<%s> value (%s) not in %s' % (instance.tagname, value,
+                                                            self.restriction_values))
+
+
+class LightColor(ListSimpleType):
     allowed_values = ['green', 'orange', 'red']
 
 
@@ -204,7 +222,7 @@ def test_descriptor_attribute():
 
     class Player(ComplexType):
 
-        platform = XSimpleType(['pc'], 'platform')
+        platform = ListXSimpleType(['pc'], 'platform')
         lastlogin = XDateTimeType('lastlogin')
         birthdate = XDateType('birthdate')
         timeplayed = XTimeType('timeplayed')
@@ -231,7 +249,7 @@ def test_descriptor_attribute():
 
 def test_xsimple_type_subclass():
 
-    class Platform(XSimpleType):
+    class Platform(ListXSimpleType):
         name = 'platform'
 
     class XboxGamer(ComplexType):

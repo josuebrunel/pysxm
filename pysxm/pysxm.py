@@ -98,13 +98,13 @@ class BaseType(object):
 class SimpleType(BaseType):
     """Data binding class for SimpleType
     """
-    allowed_values = None
 
     def __init__(self, value):
-        if value not in self.allowed_values:
-            raise ValueError('<%s> value (%s) not in %s' % (self.tagname, value,
-                                                            self.allowed_values))
+        self.check_restriction(value)
         self.value = value
+
+    def check_restriction(self, value):
+        raise NotImplementedError
 
 
 class GenericDateTime(BaseType):
@@ -150,23 +150,24 @@ class ComplexType(BaseType):
 
 class XSimpleType(object):
 
-    def __init__(self, allowed_values, name=None):
-        self.allowed_values = allowed_values
+    def __init__(self, restriction_values, name=None):
+        self.restriction_values = restriction_values
         if name:
             self.name = name
 
     def __set__(self, instance, value):
         if instance is None:
             return self
-        if value not in self.allowed_values:
-            raise ValueError('<%s> value (%s) not in %s' % (
-                instance.tagname, value, self.allowed_values))
+        self.check_restriction(instance, value)
         instance.__dict__[self.name] = value
 
     def __get__(self, instance, klass):
         if instance is None:
             return self
         return instance.__dict__[self.name]
+
+    def check_restriction(self, instance, value):
+        raise NotImplementedError
 
 
 class XDateTimeType(object):
