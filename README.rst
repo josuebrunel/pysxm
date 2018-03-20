@@ -146,6 +146,9 @@ To do so, we can inherit from **SimpleType** object and define a restriction by 
 
     class AdultAge(SimpleType):
 
+        tagname = 'age'
+        attrib = {'minvalue': '18', 'maxvalue': '100'}
+
         def check_restriction(self, value):
             if int(value) < 18:
                 raise ValueError("<%s> '%d' < 18" % (self.tagname, value))
@@ -178,7 +181,7 @@ To do so, we can inherit from **SimpleType** object and define a restriction by 
             <login>t0ken</login>
             <password>l33tolite</password>
         </credentials>
-        <age>30</age>
+        <age maxvalue="100" minvalue="18">30</age>
         <fname>token</fname>
     </person>
     In [6]: person.save('token.xml')
@@ -194,7 +197,7 @@ The **save** method (*object.save(<filename>)*) allows you to save the xml resul
             <login>t0ken</login>
             <password>l33tolite</password>
         </credentials>
-        <age>30</age>
+        <age maxvalue="100" minvalue="18">30</age>
         <fname>token</fname>
     </person>
 
