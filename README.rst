@@ -13,6 +13,8 @@ It comes with two simple and basic types:
 - SimpleType
 - ComplexType
 
+It supports py2 and py3 and uses *lxml.objectify* under the hood.
+
 
 Installation
 ------------
