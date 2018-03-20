@@ -8,11 +8,8 @@ Simple XML Python Marsheller
 
 
 **pysxm** is a simple and extensible xml python marsheller.
-It comes with the following pre-defined types:
+It comes with two simple and basic types:
 
-- DateTimeType
-- DateType
-- TimeType
 - SimpleType
 - ComplexType
 
@@ -25,132 +22,165 @@ Installation
     pip install pysxm
 
 
-Couple things to know
----------------------
-
-- For all types, the default **tagname** is the lowercased name of the class e.g for **class Color(SimpleType)**  we will have **<color>**. You can customize it by setting the attribute **_tagame** in your subclass.
-- For **ComplexType** you can decide of the **order**  and the **presence** of attributes to serialize by setting the **_sequence** attribute (tuple, list) in your subclass.
-- **pysxm** uses *lxml objectify* under the hood. To manipulate the **xml object** of your class:
+Quickstart
+----------
 
 .. code:: python
 
-    In [16]: class Person(ComplexType):
-    ...:     _tagname = 'personne'
-    ...:     _sequence = ('lname', 'fname')
+    In [1]: from pysxm import ComplexType
+    In [2]: class Person(ComplexType):
+    ...:     attrib = {'description': 'a random person'}
     ...:     def __init__(self, fname, lname):
     ...:         self.fname = fname
     ...:         self.lname = lname
     ...:
-    In [17]: token = Person('token', 'black')
-    In [18]: token.xml
-    Out[18]: <Element personne at 0x7f85c0df2e60>
-    In [26]: print(token)
-    <personne xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    In [3]: person = Person('token', 'black')
+    In [4]: print(person)
+    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" description="a random person">
         <lname>black</lname>
         <fname>token</fname>
-    </personne>
-
-Note that the *tag name* is not the expected one, because of:
-
-.. code:: python
-
-    _tagname = 'personne'
-
-
-Examples
---------
-
-.. code:: python
-
-    In [1]: from pysxm import SimpleType, ComplexType, DateType
-    In [2]: class BirthDate(DateType):
-    ...:     pass
-    ...:
-    In [3]: class Profile(SimpleType):
-    ...:     allowed_values = ('teacher', 'student')
-    ...:
-    In [6]: class User(ComplexType):
-    ...:
-    ...:     _sequence = ('username', 'profile', 'birthdate')
-    ...:     def __init__(self, data):
-    ...:         self.username = data['username']
-    ...:         self.profile = Profile(data['profile'])
-    ...:         self.birthdate = BirthDate(data['birthdate'])
-    ...:
-    In [8]: data = {
-    ...: 'username': 't0k3n',
-    ...: 'profile': 'student',
-    ...: 'birthdate': '2007-06-20'}
-    In [11]: token = User(data)
-    In [12]: print(token)
-    <user xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <username>t0k3n</username>
-        <profile>student</profile>
-        <birthdate>2007-06-20</birthdate>
-    </user>
-    # SAVING ELEMENT INTO FILE
-    In [1]: p = Person('token', 'black')
-
-    In [2]: p.save('person.xml')
-
-    In [3]: cat person.xml
-    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-      <lname>black</lname>
-      <fname>token</fname>
     </person>
-    In [4]:
-    # SETTING NAMESPACE
+
+Let's say, we want a different **tag** for our object.
+An attribute **tagname** or **_tagname** can be set to define the **xml tag name** of the object.
+
+.. code:: python
+
     In [5]: class Person(ComplexType):
-    ...:     namespace = 'http://tempuri.org/XMLSchema.xsd'
-    ...:     nsmap = {'xs': 'http://tempuri.org/XMLSchema.xsd'}
+    ...:     attrib = {'description': 'a random person'}
+    ...:     tagname = 'student'
     ...:     def __init__(self, fname, lname):
     ...:         self.fname = fname
     ...:         self.lname = lname
     ...:
-    In [6]: p = Person('token', 'black')
-    In [7]: print(p)
-    <xs:person xmlns:xs="http://tempuri.org/XMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <xs:lname>black</xs:lname>
-        <xs:fname>token</xs:fname>
-    </xs:person>
+    In [6]: person = Person('token', 'black')
+    In [7]: print(person)
+    <student xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" description="a random person">
+        <lname>black</lname>
+        <fname>token</fname>
+    </student>
 
-
-Descriptors
------------
-
-Instead of defining useless class for **none complex type**, you can use some descriptors
+A **sequence** or **_sequence** (tuple or list) attribute can be set to decide of the **order** or the **presence** of an subelement in the xml.
 
 .. code:: python
 
-    In [1]: from pysxm import ComplexType, XDateTimeType, XSimpleType, XDateType, XTimeType
-    In [2]: class Player(ComplexType):
+    In [8]: class Person(ComplexType):
+    ...:     attrib = {'description': 'a random person'}
+    ...:     tagname = 'student'
+    ...:     _sequence = ('city', 'fname')
     ...:
-    ...:         platform = XSimpleType(['pc'], 'platform')
-    ...:         lastlogin = XDateTimeType('lastlogin')
-    ...:         birthdate = XDateType('birthdate')
-    ...:         timeplayed = XTimeType('timeplayed')
+    ...:     def __init__(self, fname, lname, city):
+    ...:         self.fname = fname
+    ...:         self.lname = lname
+    ...:         self.city = city
     ...:
-    ...:         def __init__(self, gamertag, platform, brithdate):
-    ...:             self.gamertag = gamertag
-    ...:             self.platform = platform
-    ...:             self.birthdate = brithdate
+    In [9]: person = Person('token', 'black', 'south park')
+    In [10]: print(person)
+    <student xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" description="a random person">
+        <city>south park</city>
+        <fname>token</fname>
+    </student>
+
+Let's add a **namespace** to our object.
+
+.. code:: python
+
+    In [11]: class Person(ComplexType):
+    ...:     attrib = {'description': 'a random south park character'}
+    ...:     namespace = 'http://southpark/xml/'
+    ...:     nsmap = {'sp': 'http://southpark/xml/'}
     ...:
-    In [3]: player = Player('lokinghd', 'pc', '1990-10-10')
-    In [4]: print(player)
-    <player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <gamertag>lokinghd</gamertag>
-        <platform>pc</platform>
-        <birthdate>1990-10-10</birthdate>
-    </player>
-    In [5]: player.lastlogin = '2018-03-20T00:27'
-    In [6]: player.timeplayed = '04:42'
-    In [7]: print(player)
-    <player xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <gamertag>lokinghd</gamertag>
-        <platform>pc</platform>
-        <timeplayed>04:42:00</timeplayed>
-        <lastlogin>2018-03-20T00:27:00</lastlogin>
-        <birthdate>1990-10-10</birthdate>
-    </player>
+    ...:     def __init__(self, fname, lname, city):
+    ...:         self.fname = fname
+    ...:         self.lname = lname
+    ...:         self.city = city
+    ...:
+    In [12]: person = Person('token', 'black', 'south park')
+    In [13]: print(person)
+    <sp:person xmlns:sp="http://southpark/xml/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" description="a random south park character">
+        <sp:lname>black</sp:lname>
+        <sp:city>south park</sp:city>
+        <sp:fname>token</sp:fname>
+    </sp:person>
+
+Let's make sure that a *person*'s group is either *coon* or *goth*.
+To do so, we can inherit from **SimpleType** object and define a restriction by overriding **check_restriction(self, value)** method.
+
+.. code:: python
+
+    In [7]: from pysxm import ComplexType, SimpleType
+    In [8]: class Group(SimpleType):
+    ...:     allowed_groups = ('coon', 'goth')
+    ...:     def check_restriction(self, value):
+    ...:         if value not in self.allowed_groups:
+    ...:             raise ValueError('<%s> value %s not in %s' % (self.tagname, value, self.allowed_groups))
+    ...:
+    In [9]: class Person(ComplexType):
+    ...:     def __init__(self, fname, lname, group):
+    ...:         self.fname = fname
+    ...:         self.lname = lname
+    ...:         self.group = Group(group)
+    ...:
+    In [10]: Person('token', 'black', 'boys')
+    ...
+    <ipython-input-8-116b49042116> in check_restriction(self, value)
+    3     def check_restriction(self, value):
+    4         if value not in self.allowed_groups:
+    ----> 5             raise ValueError('<%s> value %s not in %s' % (self.tagname, value, self.allowed_groups))
+    6
+    ValueError: <group> value boys not in ('coon', 'goth')
+
+    In [11]: print(Person('token', 'black', 'goth'))
+    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <lname>black</lname>
+        <group>goth</group>
+        <fname>token</fname>
+    </person>
+
+**Note**: *ComplexType* can have *ComplexType* and *SimpleType* as attribute
+
+.. code:: python
+
+    from pysxm import ComplexType, SimpleType
+
+
+    class AdultAge(SimpleType):
+
+        def check_restriction(self, value):
+            if int(value) < 18:
+                raise ValueError("<%s> '%d' < 18" % (self.tagname, value))
+
+
+    class Credentials(ComplexType):
+
+        def __init__(self, login, password):
+            self.login = login
+            self.password = password
+
+
+    class Person(ComplexType):
+
+        def __init__(self, fname, lname, credentials, age):
+            self.fname = fname
+            self.lname = lname
+            self.credentials = Credentials(credentials['login'], credentials['password'])
+            self.age = age
+
+    In [3]: data = {
+    ...:     'fname': 'token', 'lname': 'black',
+    ...:     'credentials': {'login': 't0ken', 'password': 'l33tolite'},
+    ...:     'age': '30'}
+    In [4]: person = Person(**data)
+    In [5]: print(person)
+    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <lname>black</lname>
+        <credentials>
+            <login>t0ken</login>
+            <password>l33tolite</password>
+        </credentials>
+        <age>30</age>
+        <fname>token</fname>
+    </person>
+
 
 Voila :wink:
