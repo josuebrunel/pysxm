@@ -181,6 +181,29 @@ To do so, we can inherit from **SimpleType** object and define a restriction by 
         <age>30</age>
         <fname>token</fname>
     </person>
+    In [6]: person.save('token.xml')
+
+The **save** method (*object.save(<filename>)*) allows you to save the xml result into a file.
+
+.. code:: python
+
+    In [7]: cat token.xml
+    <person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <lname>black</lname>
+        <credentials>
+            <login>t0ken</login>
+            <password>l33tolite</password>
+        </credentials>
+        <age>30</age>
+        <fname>token</fname>
+    </person>
+
+
+The ext module
+^^^^^^^^^^^^^^
+
+Pysxm comes with a couple of extended types. Those types are defined in *pysxm.ext* module.
+You can learn more about them in *tests/test_pysxm.py* file.
 
 
 Voila :wink:
