@@ -169,7 +169,7 @@ To do so, we can inherit from **SimpleType** object and define a restriction by 
             self.fname = fname
             self.lname = lname
             self.credentials = Credentials(credentials['login'], credentials['password'])
-            self.age = age
+            self.age = AdultAge(age)
 
     In [3]: data = {
     ...:     'fname': 'token', 'lname': 'black',
