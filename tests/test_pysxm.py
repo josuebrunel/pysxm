@@ -249,6 +249,28 @@ def test_descriptor_attribute():
     assert xml.timeplayed == '04:42:00'
 
 
+def test_descriptor_with_checker():
+
+    class PyDeveloper(ComplexType):
+        tagname = 'dev'
+        language = XSimpleType('language', ['c', 'c++', 'python'], lambda v, av: v in av)
+
+        def __init__(self, name, country, language):
+            self.name = name
+            self.country = country
+            self.language = language
+
+    with pytest.raises(ValueError) as exc:
+        PyDeveloper('josh', 'congo', 'java')
+    assert exc.value.args[0] == "tagname <dev> value java is invalid: expected (%s)" % ['c', 'c++', 'python']
+
+    josh = PyDeveloper('josh', 'congo', 'python')
+    xml = josh.xml
+    assert xml.name == 'josh'
+    assert xml.country == 'congo'
+    assert xml.language == 'python'
+
+
 def test_xsimple_type_subclass():
 
     class Platform(ListXSimpleType):
