@@ -42,6 +42,7 @@ class ListSimpleType(SimpleType):
 
 
 class ListXSimpleType(XSimpleType):
+    name = 'platform'
 
     def check_restriction(self, instance, value):
         if value not in self.restriction_values:
@@ -223,7 +224,7 @@ def test_descriptor_attribute():
 
     class Player(ComplexType):
 
-        platform = ListXSimpleType(['pc'], 'platform')
+        platform = ListXSimpleType(restriction=['pc'])
         lastlogin = XDateTimeType('lastlogin')
         birthdate = XDateType('birthdate')
         timeplayed = XTimeType('timeplayed')
@@ -255,7 +256,7 @@ def test_xsimple_type_subclass():
 
     class XboxGamer(ComplexType):
 
-        platform = Platform(['xone', 'xbox360', 'xbox'])
+        platform = Platform(restriction=['xone', 'xbox360', 'xbox'])
 
         def __init__(self, gamertag, platform):
             self.gamertag = gamertag

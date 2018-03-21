@@ -208,7 +208,59 @@ The ext module
 ^^^^^^^^^^^^^^
 
 Pysxm comes with a couple of extended types. Those types are defined in *pysxm.ext* module.
-You can learn more about them in *tests/test_pysxm.py* file.
+
+It gets tiresome to subclass a *SimpleType* everytime you want to check a value. To overcome that, **pysxm** provides a **descriptor** called **XSimpleType**:
+
+.. code:: python
+
+    class XSimpleType(name=None, restriction=None, checker=None)
+        '''name: it's the name of the attribute.
+        restriction: self explanatory
+        checker: the fucntion that checks the input value
+        '''
+
+Here is an example:
+
+
+.. code:: python
+
+    class XboxGamer(ComplexType):
+        platform = XSimpleType('platform', ('xone', 'xbox360', 'xbox'), lambda v, av: v in av)
+        score = XSimpleType('score', (4000, 1000000), lambda v, av: int(av[0]) <= int(v) < int(av[1]))
+        lastlogin = XDateTimeType('lastlogin')
+
+        def __init__(self, gamertag, platform, score, lastlogin):
+            self.gamertag = gamertag
+            self.platform = platform
+            self.score = score
+            self.lastlogin = lastlogin
+
+    In [1]: print(gamer_data)
+    {'gamertag': 'LokingHD', 'platform': 'ps4', 'score': '22526', 'lastlogin': '2018-03-21'}
+    In [2]: XboxGamer(**gamer_data)
+    ---------------------------------------------------------------------------
+    ValueError                                Traceback (most recent call last)
+    <ipython-input-2-61f95466da46> in <module>()
+    ----> 1 XboxGamer(**gamer_data)
+    /home/josue/workspace/dev/pysxdb/pysxm/ext.pyc in check(self, instance, value)
+    77         if not self.checker(value, self.restriction_values):
+    78             raise ValueError('tagname <%s> value %s is invalid: expected (%s)'
+    ---> 79                              % (instance.tagname, value, self.restriction_values))
+        80
+    81     def check_restriction(self, instance, value):
+    ValueError: tagname <xboxgamer> value ps4 is invalid: expected (('xone', 'xbox360', 'xbox'))
+    In [3]: gamer_data['platform'] = 'xone'
+    In [4]: gamer = XboxGamer(**gamer_data)
+    In [5]: print(gamer)
+    <xboxgamer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <gamertag>LokingHD</gamertag>
+        <platform>xone</platform>
+        <score>22526</score>
+        <lastlogin>2018-03-21T00:00:00</lastlogin>
+    </xboxgamer>
+
+
+Most of the types defined in *pysxm.ext* are descriptors and they're subclassable.
 
 
 Voila :wink:
