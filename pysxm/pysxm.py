@@ -26,12 +26,16 @@ from lxml import etree, objectify as xobject
 
 
 def is_clean(element):
+    """Checks if an element has at least a child
+    """
     if not element.getchildren() and element.text is None:
         return False
     return all(is_clean(child) for child in element.iterchildren())
 
 
 def is_text_type(value):
+    """Returns True if <value> is text type
+    """
     if sys.version_info.major == 3:
         text_types = (bytes, str)
     else:
