@@ -53,11 +53,17 @@ class TimeType(GenericDateTime):
 
 class XSimpleType(object):
 
-    def __init__(self, name=None, restriction=None, checker=None):
+    default_error_msg = 'tagname <%(tagname)s> value %(value)s is invalid: expected (%(restriction)s)'
+
+    def __init__(self, name=None, restriction=None, checker=None, error_msg=None):
         if name:
             self.name = name
         self.restriction_values = restriction
         self.checker = checker
+        # if no erro message set default
+        if error_msg is None:
+            error_msg = self.default_error_msg
+        self.error_msg = error_msg
 
     def __set__(self, instance, value):
         if instance is None:
@@ -75,8 +81,9 @@ class XSimpleType(object):
 
     def check(self, instance, value):
         if not self.checker(value, self.restriction_values):
-            raise ValueError('tagname <%s> value %s is invalid: expected (%s)'
-                             % (instance.tagname, value, self.restriction_values))
+            error_data = dict(tagname=instance.tagname, value=value,
+                              restriction=self.restriction_values)
+            raise ValueError(self.error_msg % (error_data))
 
     def check_restriction(self, instance, value):
         raise NotImplementedError

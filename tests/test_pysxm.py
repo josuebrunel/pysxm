@@ -271,6 +271,30 @@ def test_descriptor_with_checker():
     assert xml.language == 'python'
 
 
+def test_descriptor_with_custom_error_msg():
+
+    custom_error_msg = "<%(value)s> seriously!"
+
+    class PyDeveloper(ComplexType):
+        tagname = 'dev'
+        language = XSimpleType('language', ['c', 'c++', 'python'], lambda v, av: v in av, custom_error_msg)
+
+        def __init__(self, name, country, language):
+            self.name = name
+            self.country = country
+            self.language = language
+
+    with pytest.raises(ValueError) as exc:
+        PyDeveloper('josh', 'congo', 'java')
+    assert exc.value.args[0] == "<java> seriously!"
+
+    josh = PyDeveloper('josh', 'congo', 'python')
+    xml = josh.xml
+    assert xml.name == 'josh'
+    assert xml.country == 'congo'
+    assert xml.language == 'python'
+
+
 def test_xsimple_type_subclass():
 
     class Platform(ListXSimpleType):
