@@ -1,4 +1,4 @@
-Simple XML Python Marsheller
+Simple XML Python Marshaller
 ============================
 
 .. image:: https://travis-ci.org/josuebrunel/pysxm.svg?branch=master
@@ -7,7 +7,7 @@ Simple XML Python Marsheller
     :target: https://coveralls.io/github/josuebrunel/pysxm?branch=master
 
 
-**pysxm** is a simple and extensible xml python marsheller.
+**pysxm** is a simple and extensible xml python marshaller.
 It comes with two simple and basic types:
 
 - SimpleType
