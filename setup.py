@@ -28,13 +28,13 @@ requirements = read('requirements.txt').splitlines()
 setup(
     name="pysxm",
     version=version_git,
-    description="Simple and extensible xml python marsheller",
+    description="Simple and extensible xml python marshaller",
     long_description=read("README.rst"),
     author=__author__,
     author_email=__email__,
     url="https://github.com/josuebrunel/pysxm",
     download_url="https://github.com/josuebrunel/pysxm/archive/{0}.tar.gz".format(version_git),
-    keywords=['xml', 'data binding', 'data', 'binding'],
+    keywords=['xml', 'data binding', 'data', 'binding', 'data-binging', 'marshaller'],
     packages=find_packages(),
     classifiers=[
         'Programming Language :: Python',
