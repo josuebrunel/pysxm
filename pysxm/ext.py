@@ -66,8 +66,6 @@ class XSimpleType(object):
         self.error_msg = error_msg
 
     def __set__(self, instance, value):
-        if instance is None:
-            return self
         if self.checker:
             self.check(instance, value)
         else:
@@ -86,7 +84,8 @@ class XSimpleType(object):
             raise ValueError(self.error_msg % (error_data))
 
     def check_restriction(self, instance, value):
-        raise NotImplementedError
+        raise NotImplementedError(
+            '<%s> does not implement <check_restriction> method' % instance.__class__.__name__)
 
 
 class XDateTimeType(object):
@@ -98,8 +97,6 @@ class XDateTimeType(object):
         self.value = value
 
     def __set__(self, instance, value):
-        if instance is None:
-            return self
         parsed_date = dateutil_parse(value)
         if self.dtype:
             instance.__dict__[self.name] = getattr(parsed_date, self.dtype)().isoformat()

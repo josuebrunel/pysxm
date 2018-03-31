@@ -68,7 +68,7 @@ class NextCycle(TimeType):
 
 class BirthInfo(ComplexType):
 
-    sequence = ('city', 'country', 'date')
+    _sequence = ('city', 'country', 'date')
 
     def __init__(self, data):
         self.city = data['birth_city']
@@ -121,14 +121,24 @@ def test_empty_node():
 
 
 def test_simple_type():
+
+    class TmpFile(SimpleType):
+        pass
+
+    with pytest.raises(NotImplementedError) as exc:
+        TmpFile('whaever')
+    assert exc.value.args[0] == "<TmpFile> does not implement <check_restriction> method"
+
     with pytest.raises(ValueError) as exc:
         LightColor('pink')
     assert exc.value.args[0] == "<lightcolor> value (pink) not in %s" % LightColor.allowed_values
 
     light_color = LightColor('green')
+    assert light_color.__repr__() == '<lightcolor>'
     xml = light_color.xml
     assert xml.tag == 'lightcolor'
     assert xml.text == 'green'
+    print(light_color)
 
 
 def test_datetime_type():
@@ -222,6 +232,17 @@ def test_save_to_file(tmpdir):
 
 def test_descriptor_attribute():
 
+    class TmpFile(ComplexType):
+
+        path = XSimpleType('path', '/tmp')
+
+        def __init__(self, path):
+            self.path = path
+
+    with pytest.raises(NotImplementedError) as exc:
+        TmpFile('/home/whatever.txt')
+    assert exc.value.args[0] == "<TmpFile> does not implement <check_restriction> method"
+
     class Player(ComplexType):
 
         platform = ListXSimpleType(restriction=['pc'])
@@ -233,6 +254,9 @@ def test_descriptor_attribute():
             self.gamertag = gamertag
             self.platform = platform
             self.birthdate = brithdate
+
+    assert Player.platform.name == 'platform'
+    assert Player.lastlogin.name == 'lastlogin'
 
     with pytest.raises(ValueError) as exc:
         Player('lokinghd', 'xone', '1990-10-10')

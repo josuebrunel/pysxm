@@ -90,7 +90,7 @@ class BaseType(object):
         return element
 
     def __str__(self):
-        return etree.tostring(self.xml, pretty_print=True)
+        return '{}'.format(etree.tostring(self.xml, pretty_print=True))
 
     def save(self, filename):
         with io.open(filename, 'wb') as fp:
@@ -107,7 +107,8 @@ class SimpleType(BaseType):
         self.value = value
 
     def check_restriction(self, value):
-        raise NotImplementedError
+        raise NotImplementedError(
+            '<%s> does not implement <check_restriction> method' % self.__class__.__name__)
 
 
 class ComplexType(BaseType):
