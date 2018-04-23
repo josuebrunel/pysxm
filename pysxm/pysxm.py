@@ -83,7 +83,7 @@ class BaseType(object):
                     if not is_clean(xml):
                         continue
                     element.append(xml)
-        xobject.deannotate(element, xsi_nil=True)
+        xobject.deannotate(element, xsi_nil=True, cleanup_namespaces=True)
         # set element attributes
         for key, value in self.attrib.items():
             element.set(key, value)
