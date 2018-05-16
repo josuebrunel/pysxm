@@ -5,6 +5,8 @@ Simple XML Python Marshaller
     :target: https://travis-ci.org/josuebrunel/pysxm
 .. image:: https://coveralls.io/repos/github/josuebrunel/pysxm/badge.svg?branch=master
     :target: https://coveralls.io/github/josuebrunel/pysxm?branch=master
+.. image:: http://pepy.tech/badge/pysxm 
+    :target: http://pepy.tech/count/pysxm
 
 
 **pysxm** is a simple and extensible xml python marshaller.
