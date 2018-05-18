@@ -211,6 +211,30 @@ The ext module
 
 Pysxm comes with a couple of extended types. Those types are defined in *pysxm.ext* module.
 
+DataComplexType
+"""""""""""""""
+
+This is a simple *DataClass* of *ComplexType*. Here is how you can set one up:
+
+.. code:: python
+
+    from pysxm.ext import DataComplexType, XSimpleType
+
+
+    class Game(DataComplexType):
+         platform = XSimpleType('platform', ['xboxone', 'xboxx'], lambda v, av: v in av)
+
+    >>> game = (name='state of decay 2', editor='undead labs', platform='xboxone')
+    >>> print(game)
+    <game>
+        <name>state of decay 2</name>
+        <platform>xboxone</platform>
+        <editor>undead labs</editor>
+    </game>
+
+XSimpleType
+"""""""""""
+
 It gets tiresome to subclass a *SimpleType* everytime you want to check a value. To overcome that, **pysxm** provides a **descriptor** called **XSimpleType**:
 
 .. code:: python
