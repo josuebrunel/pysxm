@@ -27,7 +27,7 @@ import pytest
 
 from pysxm import ComplexType, SimpleType
 from pysxm.ext import (DateTimeType, DateType, TimeType, XSimpleType,
-                       XDateTimeType, XDateType, XTimeType)
+                       XDateTimeType, XDateType, XTimeType, DataComplexType)
 from pysxm.pysxm import BaseType
 
 
@@ -356,3 +356,20 @@ def test_type_attribute():
     assert someval.xml.text == '20'
     assert someval.xml.attrib['min_value'] == '0'
     assert someval.xml.attrib['max_value'] == '100'
+
+
+def test_complext_type_data_class():
+
+    class Game(DataComplexType):
+
+        platform = XSimpleType('platform', ['xboxone', 'xboxx'], lambda v, av: v in av)
+
+    with pytest.raises(ValueError) as exc:
+        game = Game(name='state of decay 2', platform='sp4', editor='undead labs')
+    assert exc.value.args[0] == 'tagname <game> value sp4 is invalid: expected (%s)' % ['xboxone', 'xboxx']
+
+    game = Game(name='state of decay 2', platform='xboxone', editor='undead labs')
+    xml = game.xml
+    assert xml.name == 'state of decay 2'
+    assert xml.editor == 'undead labs'
+    assert xml.platform == 'xboxone'

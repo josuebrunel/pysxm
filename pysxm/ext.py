@@ -21,7 +21,7 @@ from __future__ import unicode_literals, absolute_import
 
 from dateutil.parser import parse as dateutil_parse
 
-from pysxm import BaseType, ComplexType, SimpleType
+from pysxm import BaseType, ComplexType
 
 
 class GenericDateTime(BaseType):
@@ -119,5 +119,8 @@ class XTimeType(XDateTimeType):
     dtype = 'time'
 
 
-__all__ = ["SimpleType", "DateTimeType", "DateType", "TimeType", "ComplexType",
-           "XSimpleType", "XDateTimeType", "XDateType", "XTimeType"]
+class DataComplexType(ComplexType):
+
+    def __init__(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
