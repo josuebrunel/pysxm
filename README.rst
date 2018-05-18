@@ -5,7 +5,7 @@ Simple XML Python Marshaller
     :target: https://travis-ci.org/josuebrunel/pysxm
 .. image:: https://coveralls.io/repos/github/josuebrunel/pysxm/badge.svg?branch=master
     :target: https://coveralls.io/github/josuebrunel/pysxm?branch=master
-.. image:: http://pepy.tech/badge/pysxm 
+.. image:: http://pepy.tech/badge/pysxm
     :target: http://pepy.tech/count/pysxm
 
 
@@ -215,10 +215,11 @@ It gets tiresome to subclass a *SimpleType* everytime you want to check a value.
 
 .. code:: python
 
-    class XSimpleType(name=None, restriction=None, checker=None)
+    class XSimpleType(name=None, restriction=None, checker=None, error_msg=None)
         '''name: it's the name of the attribute.
         restriction: self explanatory
         checker: the fucntion that checks the input value
+        error_msg: message returned when checking fails
         '''
 
 Here is an example:
