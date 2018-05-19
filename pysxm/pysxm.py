@@ -56,6 +56,8 @@ class BaseType(object):
 
     @classmethod
     def make_element(cls, tagname, value=None, namespace=None, nsmap=None):
+        if nsmap:
+            namespace = list(nsmap.values())[0]
         M = xobject.ElementMaker(annotate=False, namespace=namespace,
                                  nsmap=nsmap)
         return M(tagname, value)
@@ -67,17 +69,21 @@ class BaseType(object):
         return self.__class__.__name__.lower()
 
     @property
+    def klass(self):
+        return self.__class__
+
+    @property
     def xml(self):
         if not isinstance(self, (ComplexType,)):
-            element = self.make_element(self.tagname, self.value, namespace=self.namespace)
+            element = self.make_element(self.tagname, self.value, nsmap=self.klass.nsmap)
         else:
-            element = self.make_element(self.tagname, namespace=self.namespace, nsmap=self.nsmap)
+            element = self.make_element(self.tagname, nsmap=self.klass.nsmap)
             for subelt in self.sequence:
                 attr = getattr(self, subelt, None)
                 if not attr:
                     continue
                 if is_text_type(attr):
-                    element.append(self.make_element(subelt, attr, namespace=self.namespace))
+                    element.append(self.make_element(subelt, attr, nsmap=self.klass.nsmap))
                 else:
                     xml = attr.xml
                     if not is_clean(xml):

@@ -373,3 +373,28 @@ def test_complext_type_data_class():
     assert xml.name == 'state of decay 2'
     assert xml.editor == 'undead labs'
     assert xml.platform == 'xboxone'
+
+
+def test_simple_namesapce_definition():
+
+    class NsMixin(object):
+        nsmap = {'wht': 'https://whatever/xsd'}
+
+    class NsAge(NsMixin, SimpleType):
+        tagname = 'age'
+
+        def check_restriction(self, *args, **kwargs):
+            pass
+
+    class NsPerson(NsMixin, ComplexType):
+
+        def __init__(self, fname, lname, age):
+            self.fname = fname
+            self.lname = lname
+            self.age = NsAge(age)
+
+    person = NsPerson('eric', 'cartman', '10')
+    xml = person.xml
+    assert xml.fname.nsmap == NsPerson.nsmap
+    assert xml.lname.nsmap == NsPerson.nsmap
+    assert xml.age.nsmap == NsAge.nsmap
