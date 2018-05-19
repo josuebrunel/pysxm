@@ -91,7 +91,6 @@ Let's add a **namespace** to our object.
 
     In [11]: class Person(ComplexType):
     ...:     attrib = {'description': 'a random south park character'}
-    ...:     namespace = 'http://southpark/xml/'
     ...:     nsmap = {'sp': 'http://southpark/xml/'}
     ...:
     ...:     def __init__(self, fname, lname, city):
