@@ -223,7 +223,7 @@ This is a simple *DataClass* of *ComplexType*. Here is how you can set one up:
     class Game(DataComplexType):
          platform = XSimpleType('platform', ['xboxone', 'xboxx'], lambda v, av: v in av)
 
-    >>> game = (name='state of decay 2', editor='undead labs', platform='xboxone')
+    >>> game = Game(name='state of decay 2', editor='undead labs', platform='xboxone')
     >>> print(game)
     <game>
         <name>state of decay 2</name>
