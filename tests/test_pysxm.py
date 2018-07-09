@@ -398,3 +398,14 @@ def test_simple_namesapce_definition():
     assert xml.fname.nsmap == NsPerson.nsmap
     assert xml.lname.nsmap == NsPerson.nsmap
     assert xml.age.nsmap == NsAge.nsmap
+
+
+def test_xsimple_type_as_real_simpletype():
+
+    class Hero(DataComplexType):
+        faction = XSimpleType('faction', ['red talion', 'black zero'], lambda v, av: v in av,
+                              tagname='group')
+
+    hero = Hero(nickname='Nick', faction='red talion')
+    xml = hero.xml
+    assert xml.group == 'red talion'

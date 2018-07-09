@@ -238,11 +238,12 @@ It gets tiresome to subclass a *SimpleType* everytime you want to check a value.
 
 .. code:: python
 
-    class XSimpleType(name=None, restriction=None, checker=None, error_msg=None)
+    class XSimpleType(name=None, restriction=None, checker=None, error_msg=None, tagname=None)
         '''name: it's the name of the attribute.
         restriction: self explanatory
         checker: the fucntion that checks the input value
         error_msg: message returned when checking fails
+        tagname: tagname of the element
         '''
 
 Here is an example:

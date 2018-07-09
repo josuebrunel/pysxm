@@ -21,7 +21,7 @@ from __future__ import unicode_literals, absolute_import
 
 from dateutil.parser import parse as dateutil_parse
 
-from pysxm import BaseType, ComplexType
+from pysxm import BaseType, ComplexType, SimpleType
 
 
 class GenericDateTime(BaseType):
@@ -51,11 +51,21 @@ class TimeType(GenericDateTime):
         super(TimeType, self).__init__(value, 'time')
 
 
+class NoRestrictionSimpleType(SimpleType):
+
+        def __init__(self, value, tagname):
+            super(NoRestrictionSimpleType, self).__init__(value)
+            self._tagname = tagname
+
+        def check_restriction(self, value):
+            pass
+
+
 class XSimpleType(object):
 
     default_error_msg = 'tagname <%(tagname)s> value %(value)s is invalid: expected (%(restriction)s)'
 
-    def __init__(self, name=None, restriction=None, checker=None, error_msg=None):
+    def __init__(self, name=None, restriction=None, checker=None, error_msg=None, tagname=None):
         if name:
             self.name = name
         self.restriction_values = restriction
@@ -64,12 +74,15 @@ class XSimpleType(object):
         if error_msg is None:
             error_msg = self.default_error_msg
         self.error_msg = error_msg
+        self.tagname = tagname
 
     def __set__(self, instance, value):
         if self.checker:
             self.check(instance, value)
         else:
             self.check_restriction(instance, value)
+        if self.tagname:
+            value = NoRestrictionSimpleType(value, self.tagname)
         instance.__dict__[self.name] = value
 
     def __get__(self, instance, klass):
