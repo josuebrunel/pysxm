@@ -403,9 +403,14 @@ def test_simple_namesapce_definition():
 def test_xsimple_type_as_real_simpletype():
 
     class Hero(DataComplexType):
+
+        nsmap = {'wht': 'https://whatever/xsd'}
         faction = XSimpleType('faction', ['red talion', 'black zero'], lambda v, av: v in av,
-                              tagname='group')
+                              tagname='group', nsmap={'wht': 'https://whatever/xsd'},
+                              attrib={'list': 'red talion, the hippies'})
 
     hero = Hero(nickname='Nick', faction='red talion')
     xml = hero.xml
     assert xml.group == 'red talion'
+    assert xml.group.attrib == {'list': 'red talion, the hippies'}
+    assert xml.group.nsmap == hero.nsmap
