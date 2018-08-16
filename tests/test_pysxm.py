@@ -414,3 +414,16 @@ def test_xsimple_type_as_real_simpletype():
     assert xml.group == 'red talion'
     assert xml.group.attrib == {'list': 'red talion, the hippies'}
     assert xml.group.nsmap == hero.nsmap
+
+
+def test_numeric_type():
+
+    class Whatever(DataComplexType):
+        pass
+
+    limit = Whatever(min_value=10, max_value=20, avg='15', product='orange')
+    xml = limit.xml
+    assert xml.product == 'orange'
+    assert xml.min_value == 10
+    assert xml.max_value == 20
+    assert xml.avg == 15

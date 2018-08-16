@@ -33,14 +33,20 @@ def is_clean(element):
     return all(is_clean(child) for child in element.iterchildren())
 
 
-def is_text_type(value):
-    """Returns True if <value> is text type
+def is_safe_type(value):
+    """Returns True if <value> is string or numeric type
     """
-    if sys.version_info.major == 3:
-        text_types = (bytes, str)
-    else:
-        text_types = (str, unicode)
-    return isinstance(value, text_types)
+    py3 = True if sys.version_info.major > 2 else False
+    safe_text = isinstance(value, (str, bytes) if py3 else (basestring,))
+    if safe_text:
+        return True
+    try:
+        float(value)
+        return True
+    except (ValueError, TypeError):
+        pass
+
+    return False
 
 
 class BaseType(object):
@@ -82,7 +88,7 @@ class BaseType(object):
                 attr = getattr(self, subelt, None)
                 if not attr:
                     continue
-                if is_text_type(attr):
+                if is_safe_type(attr):
                     element.append(self.make_element(subelt, attr, nsmap=self.klass.nsmap))
                 else:
                     xml = attr.xml
