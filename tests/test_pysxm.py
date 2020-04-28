@@ -427,3 +427,17 @@ def test_numeric_type():
     assert xml.min_value == 10
     assert xml.max_value == 20
     assert xml.avg == 15
+
+
+def test_element_with_attr_value_0():
+
+    class Whatever(ComplexType):
+
+        def __init__(self, user, points):
+            self.user = user
+            self.points = points
+
+    wh = Whatever('token', 0)
+    xml = wh.xml
+    assert xml.user == 'token'
+    assert xml.points == 0

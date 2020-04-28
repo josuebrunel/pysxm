@@ -86,7 +86,7 @@ class BaseType(object):
             element = self.make_element(self.tagname, nsmap=self.klass.nsmap)
             for subelt in self.sequence:
                 attr = getattr(self, subelt, None)
-                if not attr:
+                if not attr and attr != 0:
                     continue
                 if is_safe_type(attr):
                     element.append(self.make_element(subelt, attr, nsmap=self.klass.nsmap))
