@@ -144,7 +144,7 @@ def test_simple_type():
 def test_datetime_type():
     with pytest.raises(ValueError) as exc:
         BirthDate('that was when i logged in')
-    assert exc.value.args[0] == "Unknown string format:"
+    assert exc.value.args[0] == "Unknown string format: %s"
 
     event_dt = LastLogin('2016-06-18 9:34')
     xml = event_dt.xml
@@ -155,7 +155,7 @@ def test_datetime_type():
 def test_date_type():
     with pytest.raises(ValueError) as exc:
         BirthDate('this is my brithday')
-    assert exc.value.args[0] == "Unknown string format:"
+    assert exc.value.args[0] == "Unknown string format: %s"
 
     birth_date = BirthDate('1990-07-21')
     xml = birth_date.xml
@@ -166,7 +166,7 @@ def test_date_type():
 def test_time_type():
     with pytest.raises(ValueError) as exc:
         NextCycle('10:34 will be the next cycle')
-    assert exc.value.args[0] == "Unknown string format:"
+    assert exc.value.args[0] == "Unknown string format: %s"
 
     ncycle = NextCycle('10:34')
     xml = ncycle.xml
