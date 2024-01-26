@@ -441,3 +441,28 @@ def test_element_with_attr_value_0():
     xml = wh.xml
     assert xml.user == 'token'
     assert xml.points == 0
+
+def test_list_subelement():
+
+    from typing import List
+
+    class Property(ComplexType):
+        def __init__(self, name: str, kind: int) -> None:
+            self.name = name
+            self.kind = kind
+
+    class System(ComplexType):
+        def __init__(self, name: str, properties: List[Property]) -> None:
+            self.name = name
+            self.properties: list[Property] =  properties
+
+    s = System("Main", [Property("A", 2), Property("B", 5)])
+    print(s)
+    xml = s.xml
+    assert xml.tag == "system"
+    assert xml.name == "Main"
+    p = xml.properties
+    assert len(p.getchildren()) == 2
+    for sp in p.getchildren():
+        assert sp.name in ("A", "B")
+        assert sp.kind in (2, 5)

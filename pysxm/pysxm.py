@@ -90,6 +90,16 @@ class BaseType(object):
                     continue
                 if is_safe_type(attr):
                     element.append(self.make_element(subelt, attr, nsmap=self.klass.nsmap))
+                elif isinstance(attr, (list,)):
+                    list_element = self.make_element(subelt, None, nsmap=self.klass.nsmap)
+                    for e in attr:
+                        if not isinstance(e, (ComplexType, SimpleType)):
+                            raise Exception("list ({}) values ({}) must be <ComplexType> or <SimpleType>: {} is {} ".format(subelt, attr, e, type(e)))
+                        exml = e.xml
+                        if not is_clean(exml):
+                            continue
+                        list_element.append(exml)            
+                    element.append(list_element)
                 else:
                     xml = attr.xml
                     if not is_clean(xml):
