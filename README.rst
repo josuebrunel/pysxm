@@ -1,8 +1,8 @@
 Simple XML Python Marshaller
 ============================
 
-.. image:: https://travis-ci.org/josuebrunel/pysxm.svg?branch=master
-    :target: https://travis-ci.org/josuebrunel/pysxm
+.. image:: https://github.com/josuebrunel/pysxm/actions/workflows/python-app.yml/badge.svg
+    :target: https://github.com/josuebrunel/pysxm/actions/workflows/python-app.yml
 .. image:: https://coveralls.io/repos/github/josuebrunel/pysxm/badge.svg?branch=master
     :target: https://coveralls.io/github/josuebrunel/pysxm?branch=master
 .. image:: http://pepy.tech/badge/pysxm
